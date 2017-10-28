@@ -436,11 +436,11 @@ Disadvantages
 ### (7.9) Future work (*no pun intended*)
 * Better integration with Promises
 
-## (7) Testing with Test-tube
+## (8) Testing with Test-tube
 
 Carbon.io comes with a testing library called Test-tube. 
 
-### (7.1) Basic test structure
+### (8.1) Basic test structure
 
 All tests have the following structure:
 
@@ -507,7 +507,7 @@ __(function() {
 })
 ```
 
-### (7.2) Test suites
+### (8.2) Test suites
 
 Since all ```Test``` objects can have an array of child / sub-tests, Tests are trees. This makes
 it easy to manage large test suites.
@@ -536,7 +536,7 @@ __(function() {
 * Any test node in the tree can be run individually.
 * [Let's play with an example](https://github.com/carbon-io-guides/example__test-suites).
 
-### (7.3) HttpTests
+### (8.3) HttpTests
 
 Test-tube makes it particularly easy to write HTTP-based tests. 
 
@@ -563,7 +563,7 @@ __(function() {
 })
 ```
 
-### (7.4) ServiceTests
+### (8.4) ServiceTests
 
 The ```ServiceTest``` class is an extension of ```HttpTest``` that makes it easy to have the test start and stop your ```Service``` 
 as part of the test process. 
@@ -596,13 +596,13 @@ This test will:
 1. Run the HTTP tests defined in ```tests```.
 1. Stop ```HelloService```.
 
-### (7.4) Running tests
+### (8.5) Running tests
 
 ```shell
 $ node test/HelloServiceTest
 ```
 
-## (8) Generating API documentation for your Services
+## (9) Generating API documentation for your Services
 
 Each ```Service``` is capable of generating its own docs. 
 
@@ -636,14 +636,14 @@ $ node lib/HelloService.js gen-static-docs --flavor aglio --out api.html
 
 * [Example output](https://github.com/carbon-io-guides/example__contact-service#generating-api-documentation-aglio-flavor)
 
-## (9) Should I use carbon.io in production?
+## (10) Should I use carbon.io in production?
 
 While we at mLab do, we do not suggest using Carbon.io for production until the 1.0 release. 
 
-## (10) Questions?
+## (11) Questions?
 
 
-## (11) Additional Resources
+## (12) Additional Resources
 
 * https://github.com/carbon-io/presentation__gluecon-2017 (this talk)
 * https://docs.carbon.io
