@@ -16,13 +16,16 @@
 
 ## (2) Design goals
 
+* Software-lifecycle aware: coding, testing, and documenting micro-services are all first-class concepts. 
+* Batteries included: authentication and access control, logging
+* Have a "the way" to do common things such as defining endpoints, parameter parsing and validation, error handling.
+* 
+
 * Reduce boilerplate code and make it clear how to do the basics (e.g how to structure your application, define endpoints, validate parameters, etc...).
 * Seamless integration with MongoDB (although one can use other dbs as well).
 * Make control flow a non-issue (a.k.a. avoid callback hell).
 * Easy authentication and access control.
 * Easy to communicate with other microservices (and therefore easier to build distributed systems).
-* Easy to document.
-* Easy to test.
 
 ## (3) The Basics
 
