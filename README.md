@@ -54,40 +54,9 @@ __(function() {
 })
 ```
 
-
-
 * Let's look at the whole thing: [Hello world example](https://github.com/carbon-io-guides/example__hello-world-service)
 
-
-### (3.2) Services, Endpoints, and Operations
-
-In carbon.io the top-level application is called a *Service*.
-
-* A Service is a tree of Endpoints
-* Endpoints are a set of Operations (GET, PUT, POST, DELETE, etc...)
-
-
-```
-Service
-  |
-  |-- Endpoint_0
-  |       | -- get
-  |       | -- put
-  |       | -- post
-  |       | -- delete
-  |       |-- Endpoint_0.1
-  |       |       |-- get
-  |       |       |-- post
-  |       |-- Endpoint_0.2
-  |       |       |-- get
-  |-- Endpoint_1
-  | ...
-  |-- Endpoint_N
-```
-
-* Let's take a look at a real example: [Hello world example](https://github.com/carbon-io-guides/example__hello-world-service)
-
-### (3.3) Defining parameters and responses
+### (3.2) Defining parameters and responses
 
 Operations can be decorated with structure that allows the system to automatically handle certain aspects of managing
 inputs and outputs, and makes the API self-describing. 
@@ -100,457 +69,11 @@ inputs and outputs, and makes the API self-describing.
   * Generating API documentation
 * Let's take a look: [Hello world (parameter parsing) example](https://github.com/carbon-io-guides/example__hello-world-service-parameter-parsing).
 
-### (3.4) Working with MongoDB
-
-While one can use Carbon.io with any database technology, Carbon.io makes it particularly easy to work with MongoDB.
-
-#### (3.4.1) Connection management
-
-Services centrally manage the MongoDB connection lifecycle for all MongoDB connections needed by the Service, 
-and ensure connection pools are managed properly. 
-
-Single database connection:
-
-```node
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    port: 8888,
-    dbUri: "mongodb://localhost:27017/mydb",
-    endpoints: {
-      messages: o({
-        _type: carbon.carbond.Endpoint,
-        get: function(req) {
-          return this.getService().db.getCollection('messages').find().toArray()
-        }
-      })
-    }
-  })
-})
-```
-
-Multiple database connections:
-
-```node
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    port: 8888,
-    dbUris: {
-      main: "mongodb://localhost:27017/mydb",
-      reporting: "mongodb://localhost:27017/reporting"
-    }
-    endpoints: {
-      messages: o({
-        _type: carbon.carbond.Endpoint,
-        get: function(req) {
-          return this.getService().dbs['main'].getCollection('messages').find().toArray()
-        }
-      }),
-      dashboards: o({
-        _type: carbon.carbond.Endpoint,
-        get: function(req) {
-          return this.getService().dbs['reporting'].getCollection('dashboards').find().toArray()
-        }
-      })
-    }
-  })
-})
-```
-
-#### (3.4.2) Leafnode
-
-* Part of Carbon.io
-* Wrapper around standard Node.js MongoDB driver
-* Supports both asynchronous and synchronous calling styles
-
-#### (3.4.3) Putting it all together
-
-Let's take a look at a real example that uses MongoDB and that illustrates a few other advanced features:
-
-* [Hello world (mongodb)](https://github.com/-guides/example__hello-world-service-mongodb)
-
-
-### (3.5) Working with other services
+## (4) Working with other services
 
 Carbon.io makes it very easy to write services that talk to other services.
 
 * Let's  take a look: [Hello world (chaining)](https://github.com/carbon-io-guides/example__hello-world-service-chaining)
-
-## (4) A step back: understanding Carbon's core operators (```o```, ```_o```, and ```__```)
-
-The Carbon.io framework is built on top of a set of core libraries that, together, provide Carbon.io with 
-much of its power. 
-
-You will often see Carbon.io modules follow this general pattern:
-
-```node
-var carbon = require('carbon-io')
-var __     = carbon.fibers.__(module)
-var _o     = carbon.bond._o(module)
-var o      = carbon.atom.o(module).main  // The .main variant is used for top-level modules that define 'main' entry points
-
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    .
-    .
-    .
-  })
-})
-```
-
-The following sections will explain the purpose of: 
-* ```o```: the universal object factory. 
-* ```_o```: the universal name resolver.
-* ```__```: light-weight Node.js "threads" called *Fibers*.
-
-### (4.1) Atom (the ```o``` operator)
-
-Atom is the universal object factory, and used to instantiate objects and to create *components*. Components are simply objects bound in the Node.js module namespace via ```module.exports```.
-
-The easiest way to think about Atom is that it allows you create object literals that also define a *class binding*. 
-
-**Example**
-
-Instead of defining a rectangle like this:
-```node
-{
-  point1: { x: 1, y: 2 }
-  point2: { x: 5, y: 7 }
-}
-```
-
-You can define it like this:
-```node
-o({
-  _type: Rectangle,
-  point1: { x: 1, y: 2 }
-  point2: { x: 5, y: 7 }
-})
-```
-
-or even this:
-```node
-o({
-  _type: Rectangle,
-  point1: o({ _type: Point, x: 1, y: 2 })
-  point2: o({ _type: Point, x: 5, y: 7 })
-})
-```
-
-where ```Rectangle``` and ```Point``` are JavaScript classes with methods you can then invoke on these objects. For example:
-
-```node
-var r = o({
-  _type: Rectangle,
-  point1: o({ _type: Point, x: 1, y: 2 })
-  point2: o({ _type: Point, x: 5, y: 7 })
-})
-
-r.scaleByFactor(10)
-```
-
-#### (4.1.1) The object lifecycle and ```_init```
-
-Object creation via the ```o``` operator follows this sequence:
-
-1. The ```_type``` field is evaluated. If it is a function it is then considered a constructor and a new instance of that Class is created by calling the constructor with no arguments. If it is an object, that object is used as the new object’s prototype. If no ```_type``` is supplied the default value of ```Object``` is used for ```_type```.
-1. All field definitions in the object passed to the ```o``` operator are applied to the newly created object.
-1. If the object has an _init method (either directly or via its Class), it is called.
-1. The newly created object is returned
-
-```node
-o({
-  dbUri: "mongodb://localhost:27017/mydb",
-  db: undefined,
-  _init: function() {
-    try {
-      this.db = carbon.leafnode.connect(this.dbUri)
-    } catch (e) {
-      throw new Error(`Error connecting to db: ${e.message}`)
-    }
-  }
-})
-```
-
-#### (4.1.2) Dynamic properties
-
-JavaScript allows for dynamic properties (via getters and setters) to be defined on objects via ```Object.defineProperty```. Atom has a shorthand for this via the ```$property``` keyword:
-
-```node
-o({
-  now: {
-    $property: {
-      get: function() {
-        return new Date()
-      }
-    }
-  }
-})
-```
-
-#### (4.1.3) Using Atom to write commandline programs using ```_main``` and ```cmdargs```
-
-```node 
-var carbon = require('carbon-io')
-var __     = carbon.fibers.__(module)
-var _o     = carbon.bond._o(module)
-var o      = carbon.atom.o(module).main  // Note the .main here since this is the main application 
-
-__(function() {
-  module.exports = o({
-    verbose: false,
-    cmdargs: {
-      sides: {
-      abbr: "s",
-      help: "The number of sides each die should have.",
-      required: false,
-      default: 6
-    },
-    num: {
-      position: 0,
-      flag: false,
-      help: "The number of dice to roll.",
-      required: false,
-      default: 1
-    },
-    verbose: {
-      abbr: "v",
-      flag: true,
-      help: "Log verbose output.",
-      required: false,
-      property: true // Will result in this.verbose having the value passed at the cmdline
-    },
-  },
-      
-  _main: function(options) {
-    if (this.verbose) {
-      console.log("Here is the input")
-      console.log(args)
-      console.log("Ok... rolling.......")
-    }
-
-    var numDice = args.num
-    var numSides = args.sides
-    var result = []
-    for (var i = 0; i < numDice; i++) {
-      result.push(Math.floor(Math.random() * numSides + 1)) // Random integer between 1 and numSides
-    }
-    
-    console.log(result)
-  }
-})
-```
-
-* Note how we use ```o.main```. 
-
-[Let's see it in action](https://github.com/carbon-io-guides/example__simple-cmdline-app)
-
-#### (4.1.4) ```o.main```
-
-* Special variant of the ```o``` operator.
-* Calls ```_main``` iff ```require.main === module``` (i.e. the module is called as the main module). 
-* This allows us to create modules that can act both as applications *and* libraries (subtle point -- pretty cool).
-   * We will see an example of this with the test framework
-
-#### (4.1.5) Advantages of using Atom:
-
-* Provide for a form of light weight dependency injection (a.k.a. DI).
-* Provides for a generic form of application configuration.
-* Declarative style ("what not how") via  "datastructure DSLs".
-
-### (4.2) Bond (the ```_o``` operator)
-
-Bond is the universal name resolver for carbon.io. 
-
-#### (4.2.1) Resolving environment variables
-```node
-_o('env:PORT')
-```
-
-#### (4.2.2) Resolving HTTP URLs
-```node
-_o('http:localhost:8888')
-```
-
-and using them to perform HTTP requests
-```node
-_o('http:localhost:8888').get().body
-```
-
-```node
-_o('http:localhost:8888').getEndpoint('hello').post({ msg: "Hello world!" })
-```
-
-#### (4.2.3) Connecting to MongoDB via a MongoDB URI
-```node
-var mydb = _o('mongodb://localhost:27017/mydb')
-mydb.getCollection("users").insert({email: "joe@acme.com"))
-```
-
-#### (4.2.4) Resolving other Node.js modules (like ```require```)
-```node
-_o('./HelloEndpoint')
-```
-
-#### In previous examples:
-* [For environment variables](https://github.com/carbon-io-guides/example__hello-world-service-advanced-mongodb/blob/master/lib/HelloService.js#L51)
-* [For organizing modules](https://github.com/carbon-io-guides/example__hello-world-service-advanced-mongodb/blob/master/lib/HelloService.js#L57-L58)
-* [For connecting to other services](https://github.com/carbon-io-guides/example__hello-world-service-advanced-chaining/blob/master/lib/PublicHelloService.js#L32) 
-
-### (4.3) Fibers (the ```__``` operator)
-
-Carbon.io uses [Node Fibers](https://github.com/laverdet/node-fibers) under the hood to manage the complexity 
-of Node.js concurrency. *Have you noticed any callbacks in the example code so far?*
-
-Fibers allow you to write code that is *logically* synchronous. Consider the following code snippet:
-
-```node
-fs.readFile("foo.txt", function(err, data) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(data)
-  }
-})
-```
-
-With Fibers you can do this:
-
-```node
-__(function() {
-  try {
-    var data = fs.readFile.sync("foo.txt") // control flow is yielded
-    console.log(data)
-  } catch (err) {
-    console.log(err)
-  } 
-})
-```
-
-* The ```readFile``` function blocks the fiber (yields) until data is returned.
-* If an error occurs it is thown as an exception (with a useful stacktrace). This is huge. 
-
-#### (4.3.1) ```__```
-
-The ```___``` operator is what spawns new fibers.
-
-```node
-__(function() {
-  // Code that runs in fiber
-  // Code in the context of the fiber may use .sync()
-})
-```
-
-you can also optionally supply a callback:
-
-```node
-__(function() {
-  // Code that runs in fiber
-}, function(err, result) {
-  // Code called when fiber returns
-})
-```
-
-**Behavior**
-* Code inside of a spwaned fiber runs asynchronous to the code that spawned the fiber
-* If a callback is supplied, the return value from the function (or exception if thrown) is passed to the callback. 
-* From within the fiber ```.sync``` can be called to synchronously call functions (without *actually* blocking). 
-
-It should also be noted that you must use fibers in all top-level messages in the event loop. Examples:
-* The main program
-* Asynchronous functions (e.g. ```process.nextTick(function() { ... })```)
-* In HTTP middleware to wrap the processing of an HTTP Request
-
-#### (4.3.2) ```.sync```
-
-The ```.sync``` method can be called to synchronously call an asynchronous function as long as that function takes the standard
-errback function as its last argument. 
-
-* Call by omiting the last errback argument
-* The value will be returned by function 
-* An exception will be thrown if there was an err
-
-There are two forms of ```.sync```:
-
-* ```OBJ.sync.METHOD(ARGS)```
-
-Example
-```node
-fs.sync.readFile("foo.txt")
-```
-
-* ```OBJ.METHOD.sync(ARGS)```
-
-Example
-```node
-fs.readFile.sync("foo.txt")
-```
-
-Best practice: The first form should be used if there is a receiver, and the second on plain functions. 
-
-#### (4.3.3) Creating synchronous wrappers
-
-You can use ```.sync``` to make user-friendly synchronous wrappers:
-
-```node
-function readFile(path) {
-  return fs.readfile.sync(path)
-}
-```
-
-#### (4.3.4) ```__.ensure``` vs ```__.spawn```
-
-There are two variants of the ```___``` operator, ```ensure``` and ```spawn```.
-
-* ```__.ensure```: Only spawns a new fiber if not already executing within a fiber (**default**).
-* ```__.spawn```: Always spawns a new fiber.
-
-Using ```__.ensure``` is particularly useful as top-level wrappers for applications that you also want to be able 
-to use as components / libraries.
-
-A great example of this are unit tests that you might want to both be part of a larger test suite as well as runnable
-standalone. 
-
-```node
-var carbon = require('carbon-io')
-var __     = carbon.fibers.__(module) // default behavior is that of __.ensure
-var o      = carbon.atom.o(module).main
-
-__(function() {
-  module.exports = o({
-    _type: carbon.testtube.Test,
-    doTest: function() {
-      // test code here
-    }
-    tests: [
-      _o('./SubTest1'),
-      _o('./SubTest2'),    
-    ]
-  })
-})
-```
-
-### (4.3.5) Revisiting our examples
-
-* [Hello world (mongodb)](https://github.com/carbon-io-guides/example__hello-world-service-mongodb/blob/master/lib/HelloEndpoint.js#L50)
-* [Hello world (chaining)](https://github.com/carbon-io-guides/example__hello-world-service-chaining/blob/master/lib/PublicHelloService.js#L58)
-
-### (4.3.6) Advantages and disadvantages
-
-Advantages
-* Very natural control flow model.
-* Exceptions and stack traces.
-* Makes Node.js more functional. *Wait what? Not passing functions as callbacks is more functional?*
-  * A pillar of functional programming is that expressions evaluate to values.
-
-Disadvantages
-* Can't be used in the browser.
-* While usually obvious, it is not generally clear when control flow will yield under the hood (*beware of shared mutable state*).
-
-### (4.3.6) Future work (*no pun intended*)
-* Better integration with Promises
 
 ## (5) Authentication and access control
 
@@ -667,7 +190,6 @@ o({
 ### (5.2) Putting it all together
 * [Hello world AAC example](https://github.com/carbon-io-guides/example__hello-world-service-aac)
 
-
 ## (6) Collections
 
 Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
@@ -758,6 +280,161 @@ __(function() {
 
 Let's look at a more elaborate example:
 * [Contact service](https://github.com/carbon-io-guides/example__contact-service)
+
+## (7) Concurrency
+
+### (7.1) Fibers (the ```__``` operator)
+
+Carbon.io uses [Node Fibers](https://github.com/laverdet/node-fibers) under the hood to manage the complexity 
+of Node.js concurrency. *Have you noticed any callbacks in the example code so far?*
+
+Fibers allow you to write code that is *logically* synchronous. Consider the following code snippet:
+
+```node
+fs.readFile("foo.txt", function(err, data) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(data)
+  }
+})
+```
+
+With Fibers you can do this:
+
+```node
+__(function() {
+  try {
+    var data = fs.readFile.sync("foo.txt") // control flow is yielded
+    console.log(data)
+  } catch (err) {
+    console.log(err)
+  } 
+})
+```
+
+* The ```readFile``` function blocks the fiber (yields) until data is returned.
+* If an error occurs it is thown as an exception (with a useful stacktrace). This is huge. 
+
+### (7.2) ```__```
+
+The ```___``` operator is what spawns new fibers.
+
+```node
+__(function() {
+  // Code that runs in fiber
+  // Code in the context of the fiber may use .sync()
+})
+```
+
+you can also optionally supply a callback:
+
+```node
+__(function() {
+  // Code that runs in fiber
+}, function(err, result) {
+  // Code called when fiber returns
+})
+```
+
+**Behavior**
+* Code inside of a spwaned fiber runs asynchronous to the code that spawned the fiber
+* If a callback is supplied, the return value from the function (or exception if thrown) is passed to the callback. 
+* From within the fiber ```.sync``` can be called to synchronously call functions (without *actually* blocking). 
+
+It should also be noted that you must use fibers in all top-level messages in the event loop. Examples:
+* The main program
+* Asynchronous functions (e.g. ```process.nextTick(function() { ... })```)
+* In HTTP middleware to wrap the processing of an HTTP Request
+
+### (7.3) ```.sync```
+
+The ```.sync``` method can be called to synchronously call an asynchronous function as long as that function takes the standard
+errback function as its last argument. 
+
+* Call by omiting the last errback argument
+* The value will be returned by function 
+* An exception will be thrown if there was an err
+
+There are two forms of ```.sync```:
+
+* ```OBJ.sync.METHOD(ARGS)```
+
+Example
+```node
+fs.sync.readFile("foo.txt")
+```
+
+* ```OBJ.METHOD.sync(ARGS)```
+
+Example
+```node
+fs.readFile.sync("foo.txt")
+```
+
+Best practice: The first form should be used if there is a receiver, and the second on plain functions. 
+
+### (7.4) Creating synchronous wrappers
+
+You can use ```.sync``` to make user-friendly synchronous wrappers:
+
+```node
+function readFile(path) {
+  return fs.readfile.sync(path)
+}
+```
+
+### (7.5) ```__.ensure``` vs ```__.spawn```
+
+There are two variants of the ```___``` operator, ```ensure``` and ```spawn```.
+
+* ```__.ensure```: Only spawns a new fiber if not already executing within a fiber (**default**).
+* ```__.spawn```: Always spawns a new fiber.
+
+Using ```__.ensure``` is particularly useful as top-level wrappers for applications that you also want to be able 
+to use as components / libraries.
+
+A great example of this are unit tests that you might want to both be part of a larger test suite as well as runnable
+standalone. 
+
+```node
+var carbon = require('carbon-io')
+var __     = carbon.fibers.__(module) // default behavior is that of __.ensure
+var o      = carbon.atom.o(module).main
+
+__(function() {
+  module.exports = o({
+    _type: carbon.testtube.Test,
+    doTest: function() {
+      // test code here
+    }
+    tests: [
+      _o('./SubTest1'),
+      _o('./SubTest2'),    
+    ]
+  })
+})
+```
+
+### (7.7) Revisiting our examples
+
+* [Hello world (mongodb)](https://github.com/carbon-io-guides/example__hello-world-service-mongodb/blob/master/lib/HelloEndpoint.js#L50)
+* [Hello world (chaining)](https://github.com/carbon-io-guides/example__hello-world-service-chaining/blob/master/lib/PublicHelloService.js#L58)
+
+### (7.8) Advantages and disadvantages
+
+Advantages
+* Very natural control flow model.
+* Exceptions and stack traces.
+* Makes Node.js more functional. *Wait what? Not passing functions as callbacks is more functional?*
+  * A pillar of functional programming is that expressions evaluate to values.
+
+Disadvantages
+* Can't be used in the browser.
+* While usually obvious, it is not generally clear when control flow will yield under the hood (*beware of shared mutable state*).
+
+### (7.9) Future work (*no pun intended*)
+* Better integration with Promises
 
 ## (7) Testing with Test-tube
 
