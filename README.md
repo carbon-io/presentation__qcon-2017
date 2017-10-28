@@ -27,7 +27,7 @@
 
 ### (3.1) Hello world!
 
-```
+```node
 var carbon = require('carbon-io')
 var __     = carbon.fibers.__(module)
 var o      = carbon.atom.o(module)
