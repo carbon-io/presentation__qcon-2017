@@ -190,7 +190,13 @@ o({
 ### (5.2) Putting it all together
 * [Hello world AAC example](https://github.com/carbon-io-guides/example__hello-world-service-aac)
 
-## (6) Collections
+## (6) Database CRUD
+
+### (6.1)
+
+XXX simple leafnode example
+
+### (6.2)
 
 Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
 access to a collection of resources. 
@@ -204,7 +210,7 @@ PUT /users/123     // Modify User with _id of 123
 DELETE /users/123  // Remove User with _id of 123
 ```
 
-### (6.1) The Collection interface
+#### (6.2.1) The Collection interface
 
 When implementing a ```Collection```, instead of implementing the low-level HTTP methods 
 (```get```, ```post```, ```delete```, etc...), you implement the following higher-level interface:
@@ -231,7 +237,7 @@ Which results in the following tree of ```Endpoint```s and ```Operation```s:
    * ```PATCH``` which maps to ```updateObject```
    * ```DELETE``` which maps to ```removeObject```
 
-### (6.2) MongoDBCollection
+#### (6.2.2) MongoDBCollection
 
 The ```MongoDBCollection``` class is a ```Collection``` that is backed by a MongoDB database collection. 
 
@@ -254,7 +260,7 @@ __(function() {
 Let's look at a more elaborate example:
 * [Zipcode service]( https://github.com/carbon-io-guides/example__zipcode-service)
 
-### (6.3) Custom Collections
+#### (6.2.3) Custom Collections
 
 You can create custom collections that implement the ```Collection``` interface however you like:
 
