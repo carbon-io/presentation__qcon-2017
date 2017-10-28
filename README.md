@@ -196,7 +196,7 @@ o({
 
 XXX simple leafnode example
 
-### (6.2)
+### (6.2) Collections
 
 Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
 access to a collection of resources. 
