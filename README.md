@@ -25,23 +25,36 @@
 
 ## (3) The Basics
 
-### (3.1) Package structure
+### (3.1) Hello world!
 
-The Carbon.io package structure is that of a typical Node.js application.
-
-``` 
-<root>
-  |
-  |- package.json
-  |- bin/ (optional)
-  |- lib/
-  |   |- MyService.js
-  |   |...
-  |- test/
-  |   |- MyServiceTest.js
-  |   |...
-  |- docs/
 ```
+var carbon = require('carbon-io')
+var __     = carbon.fibers.__(module)
+var o      = carbon.atom.o(module)
+
+__(function() {
+  module.exports = o.main({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    endpoints : {
+      hello: o({
+        _type: carbon.carbond.Endpoint,
+        get: function(req, res) {
+          return { msg: "Hello world!" }
+        }
+      })
+    }
+  })
+})
+```
+
+In carbon.io the top-level application is called a *Service*.
+
+* A Service is a tree of Endpoints
+* Endpoints are a set of Operations (GET, PUT, POST, DELETE, etc...)
+
+* Let's look at the whole thing: [Hello world example](https://github.com/carbon-io-guides/example__hello-world-service)
+
 
 ### (3.2) Services, Endpoints, and Operations
 
