@@ -236,7 +236,7 @@ Let's look at a more elaborate example:
 
 ## (5) Working with other services
 
-Carbon.io makes it very easy to write services that talk to other services.
+In a microservices architecture it is critical it is easy for microservices to communicate with each other. Carbon.io makes it very easy to write services that talk to other services.  
 
 * Let's  take a look: [Hello world (chaining)][2]
 
