@@ -120,6 +120,8 @@ While one can use Carbon.io with any database technology, Carbon.io makes it par
 
 ### (4.1) Accessing a MongoDB database
 
+Included with Carbon.io is a MongoDB driver-wrapper called Leafnode.
+
 ```node
 __(function() {
   module.exports = o({
