@@ -127,11 +127,11 @@ access to a collection of resources.
 
 Common use case:
 ```
-GET /users         // Get all Users
-POST /users        // Add a User
-GET /users/123     // Get User with _id of 123
-PUT /users/123     // Modify User with _id of 123
-DELETE /users/123  // Remove User with _id of 123
+GET     /users       // Get all Users
+POST    /users       // Add a User
+GET     /users/123   // Get User with _id of 123
+PUT     /users/123   // Modify User with _id of 123
+DELETE  /users/123   // Remove User with _id of 123
 ```
 
 #### (4.2.1) The Collection interface
