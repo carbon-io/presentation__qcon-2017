@@ -129,6 +129,9 @@ __(function() {
     endpoints: {
       messages: o({
         _type: carbon.carbond.Endpoint,
+        post: function(req) {
+          return this.getService().db.getCollection('messages').insert(req.body)
+        },
         get: function(req) {
           return this.getService().db.getCollection('messages').find().toArray()
         }
