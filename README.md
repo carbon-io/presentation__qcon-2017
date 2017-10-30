@@ -32,6 +32,8 @@ In carbon.io the top-level application is called a *Service*.
 * A Service is a tree of *Endpoints*
 * Endpoints are a set of *Operations* (GET, PUT, POST, DELETE, etc...)
 
+#### (3.1.1) Hello world!
+
 ```node
 var carbon = require('carbon-io')
 var __     = carbon.fibers.__(module)
@@ -64,6 +66,8 @@ inputs and outputs, and makes the API self-describing.
 * This is useful for:
   * Automatic validation of input parameters and response output
   * Generating API documentation
+
+#### (3.2.1) Hello world! again
 
 ```node
 __(function() {
