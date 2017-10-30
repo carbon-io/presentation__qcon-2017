@@ -30,7 +30,12 @@ In carbon.io the top-level application is called a *Service*.
 * A Service is a tree of *Endpoints*
 * Endpoints are a set of *Operations* (GET, PUT, POST, DELETE, etc...)
 
-### (3.1) Hello world!
+### (3.1) Services and Endpoints
+
+In carbon.io the top-level application is called a *Service*.
+
+* A Service is a tree of *Endpoints*
+* Endpoints are a set of *Operations* (GET, PUT, POST, DELETE, etc...)
 
 ```node
 var carbon = require('carbon-io')
@@ -55,7 +60,7 @@ __(function() {
 
 * Let's look at the whole thing: [Hello world example](https://github.com/carbon-io-guides/example__hello-world-service)
 
-### (3.2) Defining parameters and responses
+### (3.2) Operations - defining parameters and responses
 
 Operations can be decorated with structure that allows the system to automatically handle certain aspects of managing
 inputs and outputs, and makes the API self-describing. 
