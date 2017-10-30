@@ -200,7 +200,7 @@ __(function() {
 ```
 
 Let's look at a more elaborate example:
-* [Zipcode service]( https://github.com/carbon-io-guides/example__zipcode-service)
+* [Zipcode service][4]
 
 #### (4.2.3) Custom Collections
 
@@ -227,7 +227,7 @@ __(function() {
 ```
 
 Let's look at a more elaborate example:
-* [Contact service](https://github.com/carbon-io-guides/example__contact-service)
+* [Contact service][5]
 
 ## (5) Working with other services
 
