@@ -29,7 +29,6 @@ In carbon.io the top-level application is called a *Service*.
 
 * A Service is a tree of *Endpoints*
 * Endpoints are a set of *Operations* (GET, PUT, POST, DELETE, etc...)
-* Operations can have formally defined *Parameters* and *Responses*
 
 ### (3.1) Hello world!
 
