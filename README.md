@@ -20,7 +20,7 @@
 * Have a "the way" to do common things such as structuring your application code, defining endpoints, parameter parsing and validation etc...
 * Batteries included: includes support for logging, authentication and access control, HTTP error handling, etc...
 * Simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
-* Data CRUD should be trivial. 
+* Database CRUD should be trivial. 
 * Communicating with other services should be trivial (so you can build distributed systems).
 
 ## (3) The Basics
