@@ -65,7 +65,7 @@ inputs and outputs, and makes the API self-describing.
   * Automatic validation of input parameters and response output
   * Generating API documentation
 
-```
+```node
 __(function() {
   module.exports = o({
     _type: carbon.carbond.Service,
