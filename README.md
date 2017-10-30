@@ -116,9 +116,27 @@ __(function() {
 
 ## (4) Database CRUD
 
-### (4.1)
+While one can use Carbon.io with any database technology, Carbon.io makes it particularly easy to work with MongoDB.
 
-XXX simple leafnode example
+### (4.1) Accessing a MongoDB database
+
+```node
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    dbUri: "mongodb://localhost:27017/mydb",
+    endpoints: {
+      messages: o({
+        _type: carbon.carbond.Endpoint,
+        get: function(req) {
+          return this.getService().db.getCollection('messages').find().toArray()
+        }
+      })
+    }
+  })
+})
+```
 
 ### (4.2) Collections
 
