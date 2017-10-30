@@ -112,7 +112,7 @@ __(function() {
 })
 ```
 
-* Let's take a look: [Hello world (parameter parsing) example](https://github.com/carbon-io-guides/example__hello-world-service-parameter-parsing).
+* Let's take a look at how it is all packaged: [Hello world (parameter parsing) example](https://github.com/carbon-io-guides/example__hello-world-service-parameter-parsing).
 
 ## (4) Working with other services
 
