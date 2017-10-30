@@ -53,8 +53,6 @@ __(function() {
 })
 ```
 
-* Let's look at the whole thing: [Hello world example](https://github.com/carbon-io-guides/example__hello-world-service)
-
 ### (3.2) Operations - defining parameters and responses
 
 Operations can be decorated with structure that allows the system to automatically handle certain aspects of managing
@@ -66,6 +64,50 @@ inputs and outputs, and makes the API self-describing.
 * This is useful for:
   * Automatic validation of input parameters and response output
   * Generating API documentation
+
+```
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    endpoints : {
+      hello: o({
+        _type: carbon.carbond.Endpoint,
+
+        get: {
+          parameters: { 
+            who: {
+              location: 'query', // one of 'path', 'query', 'header', or 'body'
+              required: false,
+              default: 'world',
+              schema: { type: 'string' } // drives parsing and validation (which can also help prevent injection attacks)
+            }
+          },
+          responses: [
+            {
+              statusCode: 200,
+              description: "Success",
+              schema: {
+                type: 'object',
+                properties: {
+                  msg: { type: 'string' }
+                },
+                required: [ 'msg' ],
+                additionalProperties: false
+              }
+            }
+          ],
+          
+          service: function(req, res) {
+            return { msg: `Hello ${req.parameters.who}!` }
+          }
+        }
+      })
+    }
+  })
+})
+```
+
 * Let's take a look: [Hello world (parameter parsing) example](https://github.com/carbon-io-guides/example__hello-world-service-parameter-parsing).
 
 ## (4) Working with other services
