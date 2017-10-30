@@ -186,7 +186,7 @@ Which results in the following tree of ```Endpoint```s and ```Operation```s:
 
 #### (4.2.2) MongoDBCollection
 
-The ```MongoDBCollection``` class is a ```Collection``` that is backed by a MongoDB database collection.
+The ```MongoDBCollection``` class is a ```Collection``` that is backed by a MongoDB database collection and exposes that database collection via REST.  
 
 ```node
 __(function() {
