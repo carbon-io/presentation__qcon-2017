@@ -114,20 +114,117 @@ __(function() {
 
 * Let's take a look at how it is all packaged: [Hello world (parameter parsing) example][1].
 
-## (4) Working with other services
+## (4) Database CRUD
+
+### (4.1)
+
+XXX simple leafnode example
+
+### (4.2) Collections
+
+Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
+access to a collection of resources.
+
+Common use case:
+```
+GET     /users       // Get all Users
+POST    /users       // Add a User
+GET     /users/123   // Get User with _id of 123
+PUT     /users/123   // Modify User with _id of 123
+DELETE  /users/123   // Remove User with _id of 123
+```
+
+#### (4.2.1) The Collection interface
+
+When implementing a ```Collection```, instead of implementing the low-level HTTP methods
+(```get```, ```post```, ```delete```, etc...), you implement the following higher-level interface:
+
+* ```insert(obj, reqCtx)```
+* ```find(query, reqCtx)```
+* ```update(query, update, reqCtx)```
+* ```remove(query, reqCtx)```
+* ```saveObject(obj, reqCtx)```
+* ```findObject(id, reqCtx)```
+* ```updateObject(id, update, reqCtx)```
+* ```removeObject(id, reqCtx)```
+
+Which results in the following tree of ```Endpoint```s and ```Operation```s:
+
+* ```/<collection>/```
+   * ```POST``` which maps to ```insert```
+   * ```GET``` which maps to ```find```
+   * ```PATCH``` which maps to ```update```
+   * ```DELETE``` which maps to ```remove```
+* ```/<collection>/:_id```
+   * ```PUT``` which maps to ```saveObject```
+   * ```GET``` which maps to ```findObject```
+   * ```PATCH``` which maps to ```updateObject```
+   * ```DELETE``` which maps to ```removeObject```
+
+#### (4.2.2) MongoDBCollection
+
+The ```MongoDBCollection``` class is a ```Collection``` that is backed by a MongoDB database collection.
+
+```node
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    dbUri: 'mongodb://localhost:27017/mydb',
+    endpoints: {
+      messages: o({
+        _type: carbon.carbond.mongodb.MongoDBCollection,
+        collection: 'messages'
+      })
+    }
+  })
+})
+```
+
+Let's look at a more elaborate example:
+* [Zipcode service]( https://github.com/carbon-io-guides/example__zipcode-service)
+
+#### (4.2.3) Custom Collections
+
+You can create custom collections that implement the ```Collection``` interface however you like:
+
+```node
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    dbUri: "mongodb://localhost:27017/mydb",
+    endpoints: {
+      feedback: o({
+        _type: carbon.carbond.collections.Collection,
+        // POST /feedback
+        insert: function(obj) {
+          obj.ts = new Date()
+          this.getService().db.getCollection("feedback").insert(obj)
+        },
+      })
+    }
+  })
+})
+```
+
+Let's look at a more elaborate example:
+* [Contact service](https://github.com/carbon-io-guides/example__contact-service)
+
+## (5) Working with other services
 
 Carbon.io makes it very easy to write services that talk to other services.
 
 * Let's  take a look: [Hello world (chaining)][2]
 
-## (5) Authentication and access control
+## (6) Authentication and access control
 
 * Authentication is about determining who the user is.
 * Access control is about controlling what the user has permission to do.
 
-### (5.1) Authentication
+### (6.1) Authentication
 
-#### (5.1.1) The Authenticator class
+#### (6.1.1) The Authenticator class
 
 To implement an Authenticator you create an instance of the ```Authenticator``` class:
 
@@ -144,7 +241,7 @@ o({
 When configured on a Service the authenticator will authenticate all requests and expose the
 authenticated user via ```req.user``` in all endpoint operations.
 
-#### (5.1.2) Built-in Authenticators
+#### (6.1.2) Built-in Authenticators
 
 Carbon.io comes with several built-in Authenticators:
 
@@ -178,7 +275,7 @@ o({
 })
 ```
 
-### (5.2) Access control
+### (6.2) Access control
 
 Endpoints can configure an Access Control List (ACL) to govern which users can perform each HTTP
 operation (e.g. GET, PUT, POST, etc.) on that Endpoint.
@@ -232,105 +329,8 @@ o({
 })
 ```
 
-### (5.2) Putting it all together
+### (6.2) Putting it all together
 * [Hello world AAC example][3]
-
-## (6) Database CRUD
-
-### (6.1)
-
-XXX simple leafnode example
-
-### (6.2) Collections
-
-Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
-access to a collection of resources.
-
-Common use case:
-```
-GET /users         // Get all Users
-POST /users        // Add a User
-GET /users/123     // Get User with _id of 123
-PUT /users/123     // Modify User with _id of 123
-DELETE /users/123  // Remove User with _id of 123
-```
-
-#### (6.2.1) The Collection interface
-
-When implementing a ```Collection```, instead of implementing the low-level HTTP methods
-(```get```, ```post```, ```delete```, etc...), you implement the following higher-level interface:
-
-* ```insert(obj, reqCtx)```
-* ```find(query, reqCtx)```
-* ```update(query, update, reqCtx)```
-* ```remove(query, reqCtx)```
-* ```saveObject(obj, reqCtx)```
-* ```findObject(id, reqCtx)```
-* ```updateObject(id, update, reqCtx)```
-* ```removeObject(id, reqCtx)```
-
-Which results in the following tree of ```Endpoint```s and ```Operation```s:
-
-* ```/<collection>/```
-   * ```POST``` which maps to ```insert```
-   * ```GET``` which maps to ```find```
-   * ```PATCH``` which maps to ```update```
-   * ```DELETE``` which maps to ```remove```
-* ```/<collection>/:_id```
-   * ```PUT``` which maps to ```saveObject```
-   * ```GET``` which maps to ```findObject```
-   * ```PATCH``` which maps to ```updateObject```
-   * ```DELETE``` which maps to ```removeObject```
-
-#### (6.2.2) MongoDBCollection
-
-The ```MongoDBCollection``` class is a ```Collection``` that is backed by a MongoDB database collection.
-
-```node
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    port: 8888,
-    dbUri: 'mongodb://localhost:27017/mydb',
-    endpoints: {
-      messages: o({
-        _type: carbon.carbond.mongodb.MongoDBCollection,
-        collection: 'messages'
-      })
-    }
-  })
-})
-```
-
-Let's look at a more elaborate example:
-* [Zipcode service][4]
-
-#### (6.2.3) Custom Collections
-
-You can create custom collections that implement the ```Collection``` interface however you like:
-
-```node
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    port: 8888,
-    dbUri: "mongodb://localhost:27017/mydb",
-    endpoints: {
-      feedback: o({
-        _type: carbon.carbond.collections.Collection,
-        // POST /feedback
-        insert: function(obj) {
-          obj.ts = new Date()
-          this.getService().db.getCollection("feedback").insert(obj)
-        },
-      })
-    }
-  })
-})
-```
-
-Let's look at a more elaborate example:
-* [Contact service][5]
 
 ## (7) Concurrency
 
