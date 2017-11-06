@@ -115,7 +115,9 @@ __(function() {
 
 ### (3.2) An aside on ```__```, ```o```, and ```_o```
 
-* ```__``` creates new *Fibers*
+Carbon.io has three *magical* functions that are used throughout Carbon.io apps:
+
+* ```__``` creates new *Fibers* (which will be covered in detail in section (7) below). Fibers are light light-weight threads in Node.js that allow you to call async function asynchronously (similar to but more powerful that ```async```/```await```) 
 
 
 ## (4) Database CRUD
