@@ -115,7 +115,7 @@ __(function() {
 
 ### (3.2) An aside on ```__```, ```o```, and ```_o```
 
-
+* ```__``` creates new *Fibers*
 
 
 ## (4) Database CRUD
