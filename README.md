@@ -1,6 +1,6 @@
 # QCon, 2017.11.13, San Francisco CA
 
-## (0) Hello
+## (0*) Hello
 
 * I'm Will Shulman, CEO and Co-founder of mLab.
 * Database-as-a-Service for MongoDB that runs on AWS, Azure, and Google Cloud.
@@ -8,7 +8,7 @@
 * Our infrastructure is large and complex, and is made up of dozens of types of microservices.
 * We built Carbon.io to allow us to quickly build high-quality microservices.
 
-## (1) What is Carbon.io?
+## (1*) What is Carbon.io?
 
 * A Node.js framework for building commandline programs, microservices, and APIs.
 * It is a framework, built on a set of core libraries.
@@ -17,8 +17,7 @@
 ## (2) Design goals
 
 * Software-lifecycle aware: coding, testing, and documenting micro-services are all first-class concepts.
-* Have a "the way" to do common things such as structuring your application code, defining endpoints, parameter parsing and validation etc...
-* Batteries included: includes support for logging, authentication and access control, HTTP error handling, etc...
+* Batteries included with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
 * Simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
 * Database CRUD should be trivial.
 * Communicating with other services should be trivial (so you can build distributed systems).
