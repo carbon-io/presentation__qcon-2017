@@ -113,6 +113,11 @@ __(function() {
 
 * Let's take a look at how it is all packaged: [Hello world (parameter parsing) example][1].
 
+### (3.2) An aside on ```__```, ```o```, and ```_o```
+
+
+
+
 ## (4) Database CRUD
 
 While one can use Carbon.io with any database technology, Carbon.io makes it particularly easy to work with MongoDB.
