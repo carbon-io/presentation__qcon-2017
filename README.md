@@ -16,7 +16,7 @@
 
 ## (2) Design goals
 
-* Software-lifecycle aware: coding, testing, and documenting micro-services are all first-class concepts.
+* Aware of all phases of the software lifecycle: coding, testing, and documenting micro-services are all first-class concepts.
 * Batteries included with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
 * Simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
 * Database CRUD should be trivial.
