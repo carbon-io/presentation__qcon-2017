@@ -119,6 +119,7 @@ Carbon.io has three *magical* functions that are used throughout Carbon.io apps,
 
 You will often see Carbon.io modules follow this general pattern:
 
+```node
 var carbon = require('carbon-io')
 var __     = carbon.fibers.__(module)
 var _o     = carbon.bond._o(module)
@@ -132,6 +133,7 @@ __(function() {
     .
   })
 })
+```
 
 * ```__``` creates new *Fibers* (which will be covered in detail in section (7) below). Fibers are light light-weight threads in Node.js that allow you to call async function asynchronously (similar to but more powerful that ```async```/```await```).
 
