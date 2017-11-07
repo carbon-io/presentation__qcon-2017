@@ -409,7 +409,7 @@ o({
 })
 ```
 
-### (6.2) Putting it all together
+### (6.2) Putting it all together (XXX do we have time?)
 * [Hello world AAC example][3]
 
 ## (7*) Concurrency
