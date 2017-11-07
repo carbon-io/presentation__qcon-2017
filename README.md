@@ -291,7 +291,7 @@ __(function() {
 Let's look at a more elaborate example: (XXX We have time for this?)
 * [Contact service][5]
 
-## (5) Working with other services
+## (5*) Working with other services
 
 In a microservices architecture it is critical it is easy for microservices to communicate with each other. Carbon.io makes it very easy to write services that talk to other services.  
 
