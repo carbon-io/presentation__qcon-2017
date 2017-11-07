@@ -297,7 +297,7 @@ In a microservices architecture it is critical it is easy for microservices to c
 
 * Let's  take a look: [Hello world (chaining)][2]
 
-## (6) Authentication and access control
+## (6*) Authentication and access control
 
 * Authentication is about determining who the user is.
 * Access control is about controlling what the user has permission to do.
