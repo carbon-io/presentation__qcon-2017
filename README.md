@@ -412,7 +412,7 @@ o({
 ### (6.2) Putting it all together
 * [Hello world AAC example][3]
 
-## (7) Concurrency
+## (7*) Concurrency
 
 ### (7.1) Fibers (the ```__``` operator)
 
