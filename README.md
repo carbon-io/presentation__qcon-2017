@@ -115,7 +115,7 @@ __(function() {
 
 ### (3.2) An aside on ```__```, ```o```, and ```_o```
 
-Carbon.io has three *magical* functions that are used throughout Carbon.io apps, ```__```, ```o```, and ```_o``.
+Carbon.io has three *magical* functions that are used throughout Carbon.io apps, ```__```, ```o```, and ```_o```.
 
 You will often see Carbon.io modules follow this general pattern:
 
