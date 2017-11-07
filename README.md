@@ -115,7 +115,23 @@ __(function() {
 
 ### (3.2) An aside on ```__```, ```o```, and ```_o```
 
-Carbon.io has three *magical* functions that are used throughout Carbon.io apps:
+Carbon.io has three *magical* functions that are used throughout Carbon.io apps, ```__```, ```o```, and ```_o``.
+
+You will often see Carbon.io modules follow this general pattern:
+
+var carbon = require('carbon-io')
+var __     = carbon.fibers.__(module)
+var _o     = carbon.bond._o(module)
+var o      = carbon.atom.o(module).main  // The .main variant is used for top-level modules that define 'main' entry points
+
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    .
+    .
+    .
+  })
+})
 
 * ```__``` creates new *Fibers* (which will be covered in detail in section (7) below). Fibers are light light-weight threads in Node.js that allow you to call async function asynchronously (similar to but more powerful that ```async```/```await```).
 
