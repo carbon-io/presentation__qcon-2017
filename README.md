@@ -22,7 +22,7 @@
 * Database CRUD should be trivial.
 * Communicating with other services should be trivial (so you can build distributed systems).
 
-## (3) The Basics
+## (3*) The Basics
 
 ### (3.1) Services and Endpoints
 
@@ -142,7 +142,7 @@ __(function() {
 * ```_o``` is Carbon.io's univesal name resolver. Can be used to resolve Node.js modules, environment variables, web addresses, etc...
 
 
-## (4) Database CRUD
+## (4*) Database CRUD
 
 While one can use Carbon.io with any database technology, Carbon.io makes it particularly easy to work with MongoDB.
 
