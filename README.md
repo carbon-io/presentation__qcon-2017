@@ -665,7 +665,6 @@ __(function() {
 
 * Test trees can be arbitrarily deep.
 * Any test node in the tree can be run individually.
-* [Let's play with an example][8].
 
 ### (8.3) HttpTests
 
