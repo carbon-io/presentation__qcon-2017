@@ -568,6 +568,7 @@ Disadvantages
 * Fibers works with callbacks or promise-based functions.
 * Fibers and coroutines support deep continuations. This means that you can yield at any depth in the call stack and resume there later.
 * async / await are based on generators which only support single-frame continuations. Yielding only saves 1 stack frame, and you must use async / await at every level of the call stack. 
+* Fibers usually result in better stack traces / error handling. 
 
 ### (7.10) Future work (*no pun intended*)
 * Better integration with Promises, and async/await (slated Carbon v0.8).
