@@ -419,7 +419,7 @@ o({
 Carbon.io uses [Node Fibers](https://github.com/laverdet/node-fibers) under the hood to manage the complexity
 of Node.js concurrency. *Have you noticed any callbacks in the example code so far?*
 
-Fibers allow you to write code that is *logically* synchronous. Consider the following code snippet:
+Fibers allow you to write code that is *logically* synchronous (similar to async/await). Consider the following code snippet:
 
 ```node
 fs.readFile("foo.txt", function(err, data) {
@@ -549,7 +549,7 @@ __(function() {
 
 ### (7.7) Revisiting our examples
 
-* [Hello world (mongodb)][6]
+* [Hello world (mongodb)][6] XXX is this valid?
 * [Hello world (chaining)][7]
 
 ### (7.8) Advantages and disadvantages
@@ -567,7 +567,7 @@ Disadvantages
 ### (7.9) Comparison to async / await
 * Fibers works with callbacks or promise-based functions.
 * Fibers and coroutines support deep continuations. This means that you can yield at any depth in the call stack and resume there later.
-* async / await are based on generators which only support single-frame continuations. Yielding only saves 1 stack frame, and you must use async / await at every level of the call stack. 
+* async / await are based on generators which only support single-frame continuations. Yielding only saves 1 stack frame, and you must use async / await at every level of the call stack. This can be cumbersome, although more explicit about when yielding can occur.
 * Fibers usually result in better stack traces / error handling. 
 
 ### (7.10) Future work (*no pun intended*)
