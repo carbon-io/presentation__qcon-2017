@@ -565,7 +565,7 @@ Disadvantages
 * While usually obvious, it is not generally clear when control flow will yield under the hood (*beware of shared mutable state*).
 
 ### (7.9) Comparison to async / await
-* Works with callbacks or promise-based functions.
+* Fibers works with callbacks or promise-based functions.
 * Fibers and coroutines support deep continuations. This means that you can yield at any depth in the call stack and resume there later.
 * async / await are based on generators which only support single-frame continuations. Yielding only saves 1 stack frame, and you must use async / await at every level of the call stack. 
 
