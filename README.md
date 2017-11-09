@@ -171,35 +171,6 @@ __(function() {
 })
 ```
 
-Multiple database connections:
-
-```node
-__(function() {
-  module.exports = o({
-    _type: carbon.carbond.Service,
-    port: 8888,
-    dbUris: {
-      main: "mongodb://localhost:27017/mydb",
-      reporting: "mongodb://localhost:27017/reporting"
-    }
-    endpoints: {
-      messages: o({
-        _type: carbon.carbond.Endpoint,
-        get: function(req) {
-          return this.getService().dbs['main'].getCollection('messages').find().toArray()
-        }
-      }),
-      dashboards: o({
-        _type: carbon.carbond.Endpoint,
-        get: function(req) {
-          return this.getService().dbs['reporting'].getCollection('dashboards').find().toArray()
-        }
-      })
-    }
-  })
-})
-```
-
 ### (4.2) Collections
 
 Collections are an abstraction on top of ```Endpoint```s that provide a higher-level interface for implementing
