@@ -16,11 +16,11 @@
 
 ## (2) Design goals
 
-* Aware of all phases of the software lifecycle: *coding*, *testing*, and *documenting* micro-services are all first-class concepts.
-* Batteries included with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
-* Simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
+* Should be aware of all phases of the software lifecycle: *coding*, *testing*, and *documenting* micro-services are all first-class concepts.
+* Should come with *"batteries included"* with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
+* Should simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
 * Database CRUD should be trivial.
-* Communicating with other services should be trivial (so you can build distributed systems).
+* Communicating with other services should be trivial (so you can easily build distributed systems).
 
 ## (3*) The Basics
 
