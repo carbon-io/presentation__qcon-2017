@@ -54,7 +54,7 @@ __(function() {
 })
 ```
 
-* [Try it!][10]
+* [Source code][10]
 
 ### (3.2) Operations - defining parameters and responses
 
