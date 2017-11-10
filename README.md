@@ -14,9 +14,9 @@
 * It is a framework, built on a set of core libraries.
 * It is opinionated *(but also friendly)*.
 
-## (2) Design goals
+## (2*) Design goals
 
-* Should be aware of all phases of the software lifecycle: *coding*, *testing*, and *documenting* micro-services are all first-class concepts.
+* Should wholistically assist in *coding*, *testing*, and *documenting* micro-services.
 * Should come with *"batteries included"* with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
 * Should simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
 * Database CRUD should be trivial.
@@ -36,10 +36,10 @@ In carbon.io the top-level application is called a *Service*.
 ```node
 var carbon = require('carbon-io')
 var __     = carbon.fibers.__(module)
-var o      = carbon.atom.o(module)
+var o      = carbon.atom.o(module).main
 
 __(function() {
-  module.exports = o.main({
+  module.exports = o({
     _type: carbon.carbond.Service,
     port: 8888,
     endpoints : {
