@@ -10,7 +10,7 @@
 
 ## (1*) What is Carbon.io?
 
-* A Node.js framework for building commandline programs, microservices, and APIs.
+* A Node.js framework for building microservices, and APIs.
 * It is a framework, built on a set of core libraries.
 * It is opinionated *(but also friendly)*.
 
