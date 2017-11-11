@@ -137,7 +137,7 @@ __(function() {
 })
 ```
 
-* ```__``` creates new *Fibers* (which will be covered in detail in section (7) below). Fibers are light light-weight threads in Node.js that allow you to call async function asynchronously (similar to but more powerful that ```async```/```await```).
+* ```__``` creates new *Fibers* (which will be covered in detail in section (7) below). Fibers are like light-weight threads in Node.js that allow you to call async function asynchronously (similar to but more powerful that ```async```/```await```).
 
 * ```o``` is Carbon.io's universal object factory, used for instantiating classes and injecting property values. 
 
