@@ -742,6 +742,7 @@ $ node lib/HelloService.js gen-static-docs --flavor aglio --out api.html
 ## (10) Should I use carbon.io in production?
 
 While we at mLab do, we do not suggest using Carbon.io for production until the 1.0 release. 
+
 *This presentation and examples are based on Carbon.io v0.6.*
 
 ## (11) Questions?
