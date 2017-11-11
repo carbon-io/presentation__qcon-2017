@@ -16,9 +16,9 @@
 
 ## (2*) Design goals
 
-* Should wholistically assist in the *coding*, *testing*, and *documenting* of micro-services.
-* Should come with *"batteries included"* with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
-* Should simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
+* Assist in the *coding*, *testing*, and *documenting* of micro-services.
+* Come with *"batteries included"* with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
+* Simplify concurrency (a.k.a. avoid callback hell) and make it easier to debug code by bringing back stack traces.
 * Database CRUD should be trivial.
 * Communicating with other services should be trivial (so you can easily build distributed systems).
 
