@@ -381,7 +381,7 @@ o({
 
 ## (7*) Concurrency
 
-### (7.1) Fibers (the ```__``` operator)
+### (7.1) Fibers (using ```__``` and ```sync()```)
 
 Carbon.io uses [Node Fibers](https://github.com/laverdet/node-fibers) under the hood to manage the complexity
 of Node.js concurrency. *Have you noticed any callbacks in the example code so far?*
@@ -414,65 +414,7 @@ __(function() {
 * The ```readFile``` function blocks the fiber (yields) until data is returned.
 * If an error occurs it is thown as an exception (with a useful stacktrace). This is huge.
 
-### (7.2) ```__```
-
-The ```__``` operator is what spawns new fibers.
-
-```node
-__(function() {
-  // Code that runs in fiber
-  // Code in the context of the fiber may use .sync()
-})
-```
-
-you can also optionally supply a callback:
-
-```node
-__(function() {
-  // Code that runs in fiber
-}, function(err, result) {
-  // Code called when fiber returns
-})
-```
-
-**Behavior**
-* Code inside of a spwaned fiber runs asynchronous to the code that spawned the fiber
-* If a callback is supplied, the return value from the function (or exception if thrown) is passed to the callback.
-* From within the fiber ```.sync``` can be called to synchronously call functions (without *actually* blocking).
-
-It should also be noted that you must use fibers in all top-level messages in the event loop. Examples:
-* The main program
-* Asynchronous functions (e.g. ```process.nextTick(function() { ... })```)
-* In HTTP middleware to wrap the processing of an HTTP Request
-
-### (7.3) ```.sync```
-
-The ```.sync``` method can be called to synchronously call an asynchronous function as long as that function takes the standard
-errback function as its last argument.
-
-* Call by omiting the last errback argument
-* The value will be returned by function
-* An exception will be thrown if there was an err
-
-There are two forms of ```.sync```:
-
-* ```OBJ.sync.METHOD(ARGS)```
-
-Example
-```node
-fs.sync.readFile("foo.txt")
-```
-
-* ```OBJ.METHOD.sync(ARGS)```
-
-Example
-```node
-fs.readFile.sync("foo.txt")
-```
-
-Best practice: The first form should be used if there is a receiver, and the second on plain functions.
-
-### (7.4) Creating synchronous wrappers
+### (7.2) Creating synchronous wrappers
 
 You can use ```.sync``` to make user-friendly synchronous wrappers:
 
@@ -482,44 +424,53 @@ function readFile(path) {
 }
 ```
 
-### (7.5) ```__.ensure``` vs ```__.spawn```
+### (7.3) Fibers in action (revisiting some examples)
 
-There are two variants of the ```__``` operator, ```ensure``` and ```spawn```.
-
-* ```__.ensure```: Only spawns a new fiber if not already executing within a fiber (**default**).
-* ```__.spawn```: Always spawns a new fiber.
-
-Using ```__.ensure``` is particularly useful as top-level wrappers for applications that you also want to be able
-to use as components / libraries.
-
-A great example of this are unit tests that you might want to both be part of a larger test suite as well as runnable
-standalone.
+#### (7.3.1) Using Leafnode to talk to MongoDB
 
 ```node
-var carbon = require('carbon-io')
-var __     = carbon.fibers.__(module) // default behavior is that of __.ensure
-var o      = carbon.atom.o(module).main
-
 __(function() {
   module.exports = o({
-    _type: carbon.testtube.Test,
-    doTest: function() {
-      // test code here
+    _type: carbon.carbond.Service,
+    port: 8888,
+    dbUri: "mongodb://localhost:27017/mydb",
+    endpoints: {
+      messages: o({
+        _type: carbon.carbond.Endpoint,
+        post: function(req) {
+          return this.getService().db.getCollection('messages').insert(req.body)
+        },
+        get: function(req) {
+          return this.getService().db.getCollection('messages').find().toArray()
+        }
+      })
     }
-    tests: [
-      _o('./SubTest1'),
-      _o('./SubTest2'),
-    ]
   })
 })
 ```
 
-### (7.7) Revisiting our examples
+#### (7.3.2) Communicating with other microservics
 
-* [Hello world (mongodb)][6] XXX is this valid?
-* [Hello world (chaining)][7]
+```node
+__(function() {
+  module.exports = o({
+    _type: carbon.carbond.Service,
+    port: 8888,
+    privateHelloService: _o('http://localhost:9999'), 
+    endpoints : {
+      hello: o({
+        _type: carbon.carbond.Endpoint,
+        
+        get: function(req, res) {
+          return this.getService().privateHelloService.getEndpoint("hello").get().body
+        }
+      })
+    }
+  })
+})
+```
 
-### (7.8) Advantages and disadvantages
+### (7.4) Advantages and disadvantages
 
 Advantages
 * Very natural control flow model.
@@ -531,13 +482,13 @@ Disadvantages
 * Can't be used in the browser.
 * While usually obvious, it is not generally clear when control flow will yield under the hood (*beware of shared mutable state*).
 
-### (7.9) Comparison to async / await
+### (7.5) Comparison to async / await
 * Fibers works with callbacks or promise-based functions.
 * Fibers and coroutines support deep continuations. This means that you can yield at any depth in the call stack and resume there later.
 * async / await are based on generators which only support single-frame continuations. Yielding only saves 1 stack frame, and you must use async / await at every level of the call stack. This can be cumbersome, although more explicit about when yielding can occur.
 * Fibers usually result in better stack traces / error handling. 
 
-### (7.10) Future work (*no pun intended*)
+### (7.6) Future work (*no pun intended*)
 * Better integration with Promises, and async/await (slated Carbon v0.8).
 
 ## (8) Testing with Test-tube
