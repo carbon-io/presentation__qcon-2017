@@ -54,8 +54,6 @@ __(function() {
 })
 ```
 
-* [Source code][10]
-
 ### (3.2) Operations - defining parameters and responses
 
 Operations can be decorated with structure that allows the system to automatically handle certain aspects of managing
