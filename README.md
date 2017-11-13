@@ -1,6 +1,6 @@
 # QCon, 2017.11.13, San Francisco CA
 
-## (0*) Hello
+## (0) Hello
 
 * I'm Will Shulman, CEO and Co-founder of mLab.
 * Database-as-a-Service for MongoDB that runs on AWS, Azure, and Google Cloud.
@@ -8,13 +8,13 @@
 * Our infrastructure is large and complex, and is made up of dozens of types of microservices.
 * We built Carbon.io to allow us to quickly build high-quality microservices.
 
-## (1*) What is Carbon.io?
+## (1) What is Carbon.io?
 
 * A Node.js framework for building microservices, and APIs.
 * It is a framework, built on a set of core libraries.
 * It is opinionated *(but also friendly)*.
 
-## (2*) Design goals
+## (2) Design goals
 
 * To assist in the *coding*, *testing*, and *documenting* of micro-services.
 * To come with *"batteries included"* with a *"the way"* to do common things such as structuring your application code, parameter parsing, logging, authentication and access control, etc...
@@ -22,7 +22,7 @@
 * Database CRUD should be trivial.
 * Communicating with other services should be trivial (so you can easily build distributed systems).
 
-## (3*) The Basics
+## (3) The Basics
 
 ### (3.1) Services and Endpoints
 
@@ -142,7 +142,7 @@ __(function() {
 * ```_o``` is Carbon.io's univesal name resolver. Can be used to resolve Node.js modules, environment variables, web addresses, etc...
 
 
-## (4*) Database CRUD
+## (4) Database CRUD
 
 While one can use Carbon.io with any database technology, Carbon.io makes it particularly easy to work with MongoDB.
 
@@ -259,13 +259,13 @@ __(function() {
 })
 ```
 
-## (5*) Working with other services
+## (5) Working with other services
 
 In a microservices architecture it is critical it is easy for microservices to communicate with each other. Carbon.io makes it very easy to write services that talk to other services.  
 
 * Let's  take a look: [Hello world (chaining)][2]
 
-## (6*) Authentication and access control
+## (6) Authentication and access control
 
 * Authentication is about determining who the user is.
 * Access control is about controlling what the user has permission to do.
@@ -377,7 +377,7 @@ o({
 })
 ```
 
-## (7*) Concurrency
+## (7) Concurrency
 
 ### (7.1) Fibers (using ```__``` and ```sync()```)
 
